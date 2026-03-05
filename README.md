@@ -2,31 +2,6 @@
 
 Fullstack приложение для управления промокодами с аналитикой. Реализует **CQRS-архитектуру**: запись в MongoDB, чтение аналитики из ClickHouse.
 
-## Архитектура
-
-```mermaid
-flowchart TB
-    subgraph write [Command - Запись]
-        API[NestJS API]
-        Mongo[(MongoDB)]
-        API -->|CRUD| Mongo
-    end
-    
-    subgraph sync [Синхронизация]
-        SyncService[Sync Service]
-        Mongo -->|after mutation| SyncService
-        SyncService -->|INSERT| CH[(ClickHouse)]
-    end
-    
-    subgraph read [Query - Чтение]
-        API -->|аналитика| CH
-        Frontend[React SPA] -->|GET /analytics/*| API
-    end
-    
-    subgraph cache [Redis]
-        API -->|cache, lock| Redis[(Redis)]
-    end
-```
 
 ### CQRS
 
